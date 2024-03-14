@@ -1,0 +1,60 @@
+services:
+
+    # Nginx Proxy Manager
+    npmapp:
+        image: 'jc21/nginx-proxy-manager:latest'
+        restart: unless-stopped
+        ports:
+        - '80:80'
+        - '127.0.0.1:81:81'
+        - '443:443'
+        volumes:
+            - ./volumes/npm/data:/data
+            - ./volumes/npm/letsencrypt:/etc/letsencrypt
+
+    # Portainer
+    portainer:
+        image: 'portainer/portainer-ce:latest'
+        restart: unless-stopped
+        ports:
+            - '127.0.0.1:9443:9443'
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./volumes/portainer:/data
+
+    # Webtrees
+    webtreesapp:
+        image: docker.io/nathanvaughn/webtrees:latest
+        restart: unless-stopped
+
+        environment:
+            PRETTY_URLS: "1"
+            HTTPS: "0"
+            HTTPS_REDIRECT: "0"
+            LANG: "de-DE"
+            BASE_URL: "https://stammbaum.nlindemann.de"
+            DB_TYPE: "mysql"
+            DB_HOST: "webtreesdb"
+            DB_PORT: "3306"
+            DB_USER: ${WEBTREES_DB_USER}
+            DB_PASS: ${WEBTREES_DB_PASSWORD}
+            DB_NAME: "webtrees"
+            DB_PREFIX: "wt_"
+        volumes:
+            - ./volumes/webtrees/webtrees_data:/var/www/webtrees/data/
+            - ./volumes/webtrees/webtrees_media:/var/www/webtrees/media/
+            - ./volumes/webtrees/webtrees_mods:/var/www/webtrees/modules_v4/
+        depends_on:
+            - webtreesdb
+
+    webtreesdb:
+        image: docker.io/library/mariadb:11.1
+        restart: unless-stopped
+        environment:
+            MARIADB_DATABASE: "webtrees"
+            MARIADB_USER: ${WEBTREES_DB_USER}
+            MARIADB_ROOT_PASSWORD: ${WEBTREES_DB_ROOT_PASSWORD}
+            MARIADB_PASSWORD: ${WEBTREES_DB_PASSWORD}
+        volumes:
+            - ./volumes/webtrees/webtreesdb_data:/var/lib/mysql
+
