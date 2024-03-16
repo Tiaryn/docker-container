@@ -72,13 +72,8 @@ services:
             - nextclouddb
     
     nextclouddb:
-        image: mariadb:10.10
+        image: mariadb:10.11
         restart: unless-stopped
         command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
         volumes:
             - ./volumes/nextcloud/nextclouddb/:/var/lib/mysql
-        environment:
-            - MARIADB_ROOT_PASSWORD=${NEXTCLOUD_DB_ROOT_PASSWORD}
-            - MARIADB_USER=${NEXTCLOUD_DB_USER}
-            - MARIADB_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
-            - MARIADB_DATABASE=${NEXTCLOUD_DB_NAME}
