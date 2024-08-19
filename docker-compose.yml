@@ -47,7 +47,7 @@ services:
             - webtreesdb
 
     webtreesdb:
-        image: docker.io/library/mariadb:11.1
+        image: docker.io/library/mariadb:11.4
         restart: unless-stopped
         environment:
             MARIADB_DATABASE: "webtrees"
