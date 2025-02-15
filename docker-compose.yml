@@ -87,7 +87,7 @@ services:
 
     # Mealie
     mealieapp:
-        image: ghcr.io/mealie-recipes/mealie:v1.12.0
+        image: ghcr.io/mealie-recipes/mealie:v2.6.0
         restart: unless-stopped
         deploy:
           resources:
