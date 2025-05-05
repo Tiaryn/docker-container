@@ -59,7 +59,7 @@ services:
 
     # Nextcloud
     nextcloudapp:
-        image: nextcloud:30
+        image: nextcloud:31
         restart: unless-stopped
         volumes:
             - ./volumes/nextcloud/nextcloudapp/:/var/www/html
