@@ -1,0 +1,15 @@
+services:
+  stirlingpdfapp:
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest-fat
+    container_name: stirlingpdfapp
+    ports:
+      - '127.0.0.1:8080:8080'
+    volumes:
+      - ./stirlingpdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - ./stirlingpdf/extraConfigs:/configs
+      - ./stirlingpdf/customFiles:/customFiles/
+      - ./stirlingpdf/logs:/logs/
+      - ./stirlingpdf/pipeline:/pipeline/
+    environment:
+      - DISABLE_ADDITIONAL_FEATURES=false
+      - LANGS=en_GB,de_DE

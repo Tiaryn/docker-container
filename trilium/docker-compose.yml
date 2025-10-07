@@ -1,0 +1,15 @@
+services:
+  triliumapp:
+    image: triliumnext/trilium:v0.99.1
+    container_name: triliumapp
+    restart: unless-stopped
+    volumes:
+      - ./trilium/trilium-data:/home/node/trilium-data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external: true

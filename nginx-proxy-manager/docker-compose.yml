@@ -1,0 +1,21 @@
+services:
+
+  # Nginx Proxy Manager
+  npmapp:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: npmapp
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '127.0.0.1:81:81'
+      - '443:443'
+    volumes:
+      - ./npm/data:/data
+      - ./npm/letsencrypt:/etc/letsencrypt
+    networks:
+      - reverse-proxy
+
+networks:
+
+  reverse-proxy:
+    external: true

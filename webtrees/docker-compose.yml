@@ -1,0 +1,51 @@
+services:
+
+  # Webtrees
+  webtreesapp:
+    image: docker.io/nathanvaughn/webtrees:latest
+    container_name: webtreesapp
+    restart: unless-stopped
+    environment:
+      PRETTY_URLS: "1"
+      HTTPS: "0"
+      HTTPS_REDIRECT: "0"
+      LANG: "de-DE"
+      BASE_URL: "https://stammbaum.nlindemann.de"
+      DB_TYPE: "mysql"
+      DB_HOST: "webtreesdb"
+      DB_PORT: "3306"
+      DB_USER: ${WEBTREES_DB_USER}
+      DB_PASS: ${WEBTREES_DB_PASSWORD}
+      DB_NAME: "webtrees"
+      DB_PREFIX: "wt_"
+    volumes:
+      - ./webtrees/webtrees_data:/var/www/webtrees/data/
+      - ./webtrees/webtrees_media:/var/www/webtrees/media/
+      - ./webtrees/webtrees_mods:/var/www/webtrees/modules_v4/
+    depends_on:
+      - webtreesdb
+    networks:
+      - reverse-proxy
+      - webtrees-network
+
+  webtreesdb:
+    image: docker.io/library/mariadb:11.4
+    container_name: webtreesdb
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: "webtrees"
+      MARIADB_USER: ${WEBTREES_DB_USER}
+      MARIADB_ROOT_PASSWORD: ${WEBTREES_DB_ROOT_PASSWORD}
+      MARIADB_PASSWORD: ${WEBTREES_DB_PASSWORD}
+    volumes:
+      - ./webtrees/webtreesdb_data:/var/lib/mysql
+    networks:
+      - webtrees-network
+
+networks:
+  reverse-proxy:
+    external: true
+
+  webtrees-network:
+    driver: bridge
+

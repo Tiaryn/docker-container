@@ -1,0 +1,32 @@
+services:
+
+  # Mealie
+  mealieapp:
+    image: ghcr.io/mealie-recipes/mealie:v3.1.2
+    container_name: mealieapp
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+    volumes:
+      - ./mealie/mealie-data:/app/data/
+    environment:
+      # Set Backend ENV Variables Here
+      ALLOW_SIGNUP: false
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Berlin
+      BASE_URL: https://mealie.nlindemann.de
+      # SECURITY
+      SECURITY_MAX_LOGIN_ATTEMPTS: 5
+      SECURITY_USER_LOCKOUT_TIME: 1
+      # OPENAI
+      OPENAI_API_KEY: ${MEALIE_OPENAI_KEY}
+      OPENAI_WORKERS: 1
+    networks:
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external: true

@@ -1,0 +1,48 @@
+services:
+
+  # Nextcloud
+  nextcloudapp:
+    image: nextcloud:31
+    container_name: nextcloudapp
+    restart: unless-stopped
+    volumes:
+      - ./nextcloud/nextcloudapp/:/var/www/html
+    environment:
+      - MYSQL_USER=${NEXTCLOUD_DB_USER}
+      - MYSQL_PASSWORD=${NEXTCLOUD_DB_PASSWORD}
+      - MYSQL_DATABASE=${NEXTCLOUD_DB_NAME}
+      - MYSQL_HOST=nextclouddb
+      - REDIS_HOST=nextcloudredis
+    depends_on:
+      - nextclouddb
+      - nextcloudredis
+    networks:
+      - reverse-proxy
+      - nextcloud-network
+
+  nextclouddb:
+    image: mariadb:10.11
+    container_name: nextclouddb
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - ./nextcloud/nextclouddb/:/var/lib/mysql
+    networks:
+      - nextcloud-network
+
+  nextcloudredis:
+    image: redis:7.4
+    container_name: nextcloudredis
+    restart: unless-stopped
+    volumes:
+      - ./nextcloud/nextcloudredis/:/data
+    networks:
+      - nextcloud-network
+
+networks:
+
+  reverse-proxy:
+    external: true
+
+  nextcloud-network:
+    driver: bridge
