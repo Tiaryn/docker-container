@@ -1,6 +1,6 @@
 services:
   triliumapp:
-    image: triliumnext/trilium:v0.99.1
+    image: triliumnext/trilium:v0.99.5
     container_name: triliumapp
     restart: unless-stopped
     volumes:
