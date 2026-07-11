@@ -1,6 +1,7 @@
 services:
+
   karakeepapp:
-    image: ghcr.io/karakeep-app/karakeep:0.27.1
+    image: ghcr.io/karakeep-app/karakeep:0.32.0
     container_name: karakeepapp
     restart: unless-stopped
     volumes:
@@ -18,6 +19,7 @@ services:
     networks:
       - reverse-proxy
       - karakeep-network
+
   karakeepchrome:
     image: gcr.io/zenika-hub/alpine-chrome:latest
     container_name: karakeepchrome
@@ -31,8 +33,9 @@ services:
       - --hide-scrollbars
     networks:
       - karakeep-network
+
   karakeepmeilisearch:
-    image: getmeili/meilisearch:v1.22.3
+    image: getmeili/meilisearch:v1.17.1
     container_name: karakeepmeilisearch
     restart: unless-stopped
     env_file:

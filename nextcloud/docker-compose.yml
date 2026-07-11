@@ -2,7 +2,7 @@ services:
 
   # Nextcloud
   nextcloudapp:
-    image: nextcloud:31
+    image: nextcloud:33
     container_name: nextcloudapp
     restart: unless-stopped
     volumes:
@@ -21,7 +21,7 @@ services:
       - nextcloud-network
 
   nextclouddb:
-    image: mariadb:10.11
+    image: mariadb:11.8
     container_name: nextclouddb
     restart: unless-stopped
     command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
@@ -31,7 +31,7 @@ services:
       - nextcloud-network
 
   nextcloudredis:
-    image: redis:7.4
+    image: redis:8.8
     container_name: nextcloudredis
     restart: unless-stopped
     volumes:

@@ -2,18 +2,19 @@ services:
 
   # Mealie
   mealieapp:
-    image: ghcr.io/mealie-recipes/mealie:v3.1.2
+    image: ghcr.io/mealie-recipes/mealie:v3.20.1
     container_name: mealieapp
     restart: unless-stopped
     deploy:
       resources:
         limits:
-          memory: 500M
+          memory: 700M
     volumes:
       - ./mealie/mealie-data:/app/data/
     environment:
       # Set Backend ENV Variables Here
       ALLOW_SIGNUP: false
+      TOKEN_TIME: 672 # two weeks
       PUID: 1000
       PGID: 1000
       TZ: Europe/Berlin
